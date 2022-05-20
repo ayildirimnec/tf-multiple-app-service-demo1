@@ -11,6 +11,10 @@ provider "azurerm"
   features  {}
 }
 
+terraform {
+  backend "azurerm" {}
+}
+
 variable app-service-plan-name {
   type        = string
   default     = "necdemoappsvc" 
