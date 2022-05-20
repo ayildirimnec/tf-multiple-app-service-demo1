@@ -44,7 +44,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'plan'
-    commandOptions: '-input=false -out=$(Build.BinariesDirectory)/tfplan'
+    commandOptions: '-var-file=$(env).tfvars -input=false -out=$(Build.BinariesDirectory)/tfplan'
     environmentServiceNameAzureRM: $(AzureConnector)
   displayName: 'Plan TF'
 
