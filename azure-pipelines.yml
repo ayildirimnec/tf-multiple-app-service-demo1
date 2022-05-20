@@ -1,0 +1,67 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+  displayName: 'Install TF'
+  
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: $(AzureConnector)
+    backendAzureRmResourceGroupName: 'AzureDevOpsPOC'
+    backendAzureRmStorageAccountName: 'devopsvmterraformstroage'
+    backendAzureRmContainerName: 'appservicetfstate'
+    backendAzureRmKey: 'terraform.tfstate'
+  displayName: 'Initialize TF'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    commandOptions: '-input=false -out=$(Build.BinariesDirectory)/tfplan'
+    environmentServiceNameAzureRM: $(AzureConnector)
+  displayName: 'Plan TF'
+
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: 'tar'
+    tarCompression: 'gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+    replaceExistingArchive: true
+  displayName: 'Create Plan Artifact'
+ 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: '$(Build.BuildId)-tfplan'
+    publishLocation: 'Container'
+  displayName: 'Publish Plan Artifact'
