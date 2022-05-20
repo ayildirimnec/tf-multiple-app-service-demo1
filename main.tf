@@ -23,7 +23,7 @@ terraform {
 
 resource "azurerm_resource_group" "rg" {
   name     = "${var.targetenvironmet}rgmultipleappservicedemo"
-  location = "westus2"
+  location = "australiaeast"
 }
 
 resource "azurerm_app_service_plan" "app-plan-linux" {
