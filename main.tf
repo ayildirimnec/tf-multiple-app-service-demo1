@@ -15,11 +15,11 @@ terraform {
   backend "azurerm" {}
 }
 
-variable app-service-plan-name {
-  type        = string
-  default     = "${var.environment}necdemoappsvc" 
-  description = "Enter the name of the App Service plan"
-}
+#variable app-service-plan-name {
+#  type        = string
+#  default     = "${var.environment}necdemoappsvc" 
+#  description = "Enter the name of the App Service plan"
+#}
 
 resource "azurerm_resource_group" "rg" {
   name     = "${var.environment}rgmultipleappservicedemo"
@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_app_service_plan" "app-plan-linux" {
   count = 3   
-  name                = "${var.app-service-plan-name}-${count.index}"
+  name                = "${var.environment}necdemoappsvc-${count.index}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   kind                = "Linux"
