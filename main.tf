@@ -17,12 +17,12 @@ terraform {
 
 variable app-service-plan-name {
   type        = string
-  default     = "necdemoappsvc" 
+  default     = "${var.environment}necdemoappsvc" 
   description = "Enter the name of the App Service plan"
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "rgmultipleappservicedemo"
+  name     = "${var.environment}rgmultipleappservicedemo"
   location = "westus2"
 }
 
