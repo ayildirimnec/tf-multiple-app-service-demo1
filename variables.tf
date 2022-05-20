@@ -1,4 +1,4 @@
-variable "targetenvironmet" = {
+variable "targetenvironmet" {
   type = string
   default = "dev"
 }
