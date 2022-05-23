@@ -42,7 +42,7 @@ resource "azurerm_app_service_plan" "app-plan-linux" {
 resource "azurerm_app_service" "example" {
   count = 3
   name                = "${var.targetenvironmet}-app-service${count.index}"
-  location            = azurerm_resource_group.app-plan-linux.location
+  location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   app_service_plan_id = azurerm_app_service_plan.app-plan-linux.id
 
